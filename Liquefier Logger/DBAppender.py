@@ -6,20 +6,20 @@ from bson.objectid import ObjectId
 
 client = MongoClient()
 db = client.test
-data = db.data
-xdata = db.xdata
-numEntries = db.data.count()
-print(numEntries)
+liqLog = db.liqLog
 
-db.xdata.remove()
+print("Running DBAppender")
+
+numEntries = db.liqLog.count()
+print("Log file contained ", numEntries, "entries")
 
 import os
 os.chdir(r'C:\Users\Patrick\Documents\Plourde Lab\Liquefier Logger')
-f = open("newfulldata.txt")
+f = open("2015_06(Jun).txt")
 linelist = f.readlines()
 
 
-with open("newfulldata.txt") as f:
+with open("2015_06(Jun).txt") as f:
 	numlines1 = sum(1 for _ in f)
 	print(numlines1)
 
@@ -157,4 +157,13 @@ if numlines1 > numEntries:
 				   "he_purity": he_purity,
 				   }
 
-		db.data.insert(newdata)
+		db.liqLog.insert(newdata)
+
+newcount = db.liqLog.count()
+
+if newcount == numEntries:
+	print("liqLog collection appended successfully")
+else:
+	print("liqLog collection append failed. Missing ", newcount - numEntries, " entries")
+
+print("Log file now contains ", numlines1, " entries")

@@ -5,19 +5,18 @@ import datetime
 
 client = MongoClient()
 db = client.test
-data = db.data
-xdata = db.xdata
+liqLog = db.liqLog
 
 # import the file
 
 import os
 os.chdir(r'C:\Users\Patrick\Documents\Plourde Lab\Liquefier Logger')
-f = open("fulldata.txt")
+f = open("2015_06(Jun).txt")
 linelist = f.readlines()
 
 # get the number of lines in the file
 
-with open("fulldata.txt") as f:
+with open("2015_06(Jun).txt") as f:
 	numlines = sum(1 for _ in f)
 print("Number of lines in this file = ", numlines)
 
@@ -153,9 +152,8 @@ for s in range(0, numlines):
 			   }
 	data.insert(newdata)
 
-	#postname = postlist[s]
-
-
-#print(postlist)
-
-	#print(date.month, "/", date.day, "/", date.year, "	", time.hour, ":", time.minute, ":", time.second, "	", pres, "	", heat, "	", level_cm, "	", level_L, "	", water_in, "	", water_out, "	", oil_T, "	", he_gas_T, "	", lo_pres, "	", hi_pres, "	", ln2, "	", cyl_p, "	", he_purity)
+popnum = db.liqLog.count()
+if popnum == numlines:
+	print("liqLog collection populated successfully. Now contains ", popnum, " entries")
+else:
+	print("liqLog collection population failed. Missing ", numlines - popnum, " entries")
